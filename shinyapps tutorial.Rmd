@@ -1,0 +1,75 @@
+---
+title: "shinydashboard"
+author: "Nam Pham"
+date: "December 7, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+Shinydashboard is a powerful tool to present your shinyapps webpage. It allows for multiple tab items are is very pleasant on the eyes. I personally used it for my final assignment and I think it turned out quite well.
+
+
+## Structure
+
+
+In the UI page, if you are not running an app.R and only running ui.R and server.R, you should first source the scripts contains the tab items that you are going to use later (or you can write it in ui.R, but it would be really messy). After that, you are going to wrap the ui variable in a dashboardPage() object. The dashboardPage() object contains many parameters, but the required ones are dashboardHeader(), dashboardSidebar, and dashboardBody(). You declare the title name in dashboardHeader(), declare what goes on in the sidebar tab, and what goes on for each main tab. 
+
+In the menuItem object inside dashboardHeader, you would first want to declare the name of the tab, what the tab name is so you can later link it to another file, and the icon that you want to use (default is blank).
+
+In the tabItems object inside dashboardBody, you declare the variable name of the tab that you want to use later. These should be in your sourced file
+
+**ui.R**
+
+``` {r eval = FALSE}
+library(shinydashboard)
+library(shiny)
+library(...)
+
+source("scripts/a.R")
+source("Scripts/b.R")
+source("scripts/c.R")
+
+my_ui <- dashboardPage(
+  
+  skin = "purple" ,
+  dashboardHeader(title = "Title"),
+  dashboardSidebar(sidebarMenu(
+    menuItem("A", tabName = "a_tab", icon = icon("home")),
+    menuItem("B", tabName = "b_tab", icon = icon("chart-line")),
+    menuItem("V", tabName = "c_tab", icon = icon("pie-chart"))
+  )),
+  dashboardBody(
+    tabItems(
+      a,
+      b,
+      c
+    ))
+)
+
+
+shinyUI(my_ui)
+```
+
+In your sourced file, you should wrap the content inside a tabItem. Make sure the tabName field matches the one declared in sidebarMenu inside dashboardSidebar and the variable name matches the tabItems inside dashboardBody
+in ui.R
+
+**a.R**
+``` {r eval = FALSE}
+a <- tabItem(
+  tabName = "a_tab",
+  
+  titlePanel("A"),
+  fluidRow(
+    box()
+    box()
+  )
+)
+```
+
+
+server.R would go like how you would do your normal shinyapps and there is not really a special syntax needed here so I would leave it to you.
